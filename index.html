@@ -7,6 +7,7 @@
     <!-- Import the component -->
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.js"></script>
     <script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <style>
         model-viewer {
             height: 100vh;
@@ -19,7 +20,12 @@
     </style>
 </head>
 <body>
+
+<div class="logo-image"></div>
+
+
 <model-viewer (
+  id="blendViewer"
   src="assets/models/Cube.glb" 
   poster="assets/models/Cube.png" 
   shadow-intensity="0.0" 
@@ -29,7 +35,9 @@
   min-camera-orbit='auto auto 100%'
   max-camera-orbit='auto auto 100%'
   min-field-of-view='10deg'
-  max-field-of-view='170deg'
+  max-field-of-view='175deg'
+  data-js-focus-visible
+  field-of-view='50deg'
   )>
 
   <button slot="ar-button" id="ar-button">
@@ -53,22 +61,31 @@
       <button class="slide" onclick="switchSrc(this, 'DamagedHelmet')" style="background-image: url('assets/models/DamagedHelmet.png');">
     </button>
     </div>
-
-    <div class="d-grid gap-2">
-        <button class="btn btn-secondary btn-lg" id="download-button">Capture</button>
+    <div class="footer_button">
+      <button class="btn btn-light btn-block btn-lg capture_button" id="download-button">Snapshot</button>
+       <div class="controls">
+        <label for="opacity">FOV</label>
+        <input class="slider-width" id="fov" type="range" min="10" max="180" step="1" value="40">
+      </div>
     </div>
-
-
   </div>
 </model-viewer>
 
 <script type="module">
-  const modelViewer = document.querySelector("model-viewer");
+  const modelViewer = document.querySelector("model-viewer#blendViewer");
+
+  modelViewer.addEventListener("load", (ev) => {
+  document.querySelector('#fov').addEventListener('input', (event) => {
+    console.log(event.target.value)
+    modelViewer.setAttribute('field-of-view', event.target.value.toString() + 'deg');
+  });
+});
 
   window.switchSrc = (element, name) => {
     const base = "assets/models/" + name;
     modelViewer.src = base + '.glb';
     modelViewer.poster = base + '.png';
+    modelViewer.field_of_view = 0.1;
     const slides = document.querySelectorAll(".slide");
     slides.forEach((element) => {element.classList.remove("selected");});
     element.classList.add("selected");
@@ -92,6 +109,8 @@
 
   document.querySelector("#download-button").addEventListener("click", downloadPosterToDataURL);
 
+
+
 </script>
 
 <style>
@@ -108,7 +127,7 @@
   }
 
   #ar-button {
-    background-image: url(assets/ic_view_in_ar_new_googblue_48dp.png);
+    background-image: url(assets/ar.png);
     background-repeat: no-repeat;
     background-size: 40px 40px;
     background-position: 12px 50%;
@@ -179,13 +198,32 @@
     display: block;
   }
 
+  #ex1Slider .slider-selection {
+	background: #BABABA;
+}
+
+  .logo-image {
+    content:url(assets/logo.png);
+    width: 200px;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 1;
+  }
+
+  .slider-width
+  {
+    margin-top: 20px ;
+      width: 90%;
+  }
+
   .slider {
-    width: 90%;
+    width: 98%;
     text-align: center;
     overflow: hidden;
     position: absolute;
-    bottom: 16px;
-    left: 16px;
+    bottom: 10px;
+    left: 10px;
   }
 
   .slides {
@@ -209,6 +247,11 @@
     border-radius: 10px;
     border: none;
     display: flex;
+  }
+
+  .capture_button {
+    width: 210px ;
+    margin-top: 10px ;
   }
 
   .slide.selected {
