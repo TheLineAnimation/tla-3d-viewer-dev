@@ -4,25 +4,18 @@
     <meta charset="UTF-8">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    
     <!-- Import the component -->
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.js"></script>
     <script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <style>
-        model-viewer {
-            height: 100vh;
-            width: auto;
-            margin: 0;
-            padding: 0;
-            border: 0;
-
-        }
     </style>
 </head>
 <body>
 
 <div class="logo-image"></div>
-
 
 <model-viewer (
   id="blendViewer"
@@ -52,8 +45,6 @@
     AR is not tracking!
   </button>
 
-
-
   <div class="slider">
     <div class="slides">
     </button>
@@ -63,9 +54,11 @@
     </div>
     <div class="footer_button">
       <button class="btn btn-light btn-block btn-lg capture_button" id="download-button">Snapshot</button>
-       <div class="controls">
-        <label for="opacity">FOV</label>
-        <input class="slider-width" id="fov" type="range" min="10" max="180" step="1" value="40">
+       <div class="rangecontainer">
+        <!-- <label id="value">FOV</label> -->
+        <input class="range" id="fov" type="range" min="10" max="180" step="0.01" value="50deg">
+        <!-- <label>Cam Target</label> -->
+        <!-- <input class="slider-width" id="cam_target" type="range" min="0.1" max="10" step="0.1" value="1"> -->
       </div>
     </div>
   </div>
@@ -73,12 +66,30 @@
 
 <script type="module">
   const modelViewer = document.querySelector("model-viewer#blendViewer");
+  const deg_label = document.querySelector('.value');
 
   modelViewer.addEventListener("load", (ev) => {
   document.querySelector('#fov').addEventListener('input', (event) => {
-    console.log(event.target.value)
-    modelViewer.setAttribute('field-of-view', event.target.value.toString() + 'deg');
+    // console.log(event.target.value)
+    let val = event.target.value.toString() + 'deg'
+    modelViewer.setAttribute('field-of-view', val);
+    // console.log(deg_label)
+    // deg_label.setAttribute('Text', val)
+
+    // modelViewer.getBoundingBoxCenter()
   });
+
+  addLoadEvent(function() {  
+    // deg_label.innerHTML = 'your tip has been submitted!';
+
+    }); 
+
+  // document.querySelector('#cam_target').addEventListener('input', (event) => {
+  //   console.log(event.target.value)
+  //   modelViewer.setAttribute('camera-target', '0m 0m ' + event.target.value.toString() + 'm');
+  // });
+
+
 });
 
   window.switchSrc = (element, name) => {
@@ -109,163 +120,9 @@
 
   document.querySelector("#download-button").addEventListener("click", downloadPosterToDataURL);
 
-
-
 </script>
 
 <style>
-  /* This keeps child nodes hidden while the element loads */
-  :not(:defined) > * {
-    display: none;
-  }
-
-  model-viewer {
-
-    background-color: #eee;
-    overflow-x: hidden;
-    --poster-color: #eee;
-  }
-
-  #ar-button {
-    background-image: url(assets/ar.png);
-    background-repeat: no-repeat;
-    background-size: 40px 40px;
-    background-position: 12px 50%;
-    background-color: #fff;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    white-space: nowrap;
-    bottom: 132px;
-    padding: 0px 16px 0px 60px;
-    font-family: Roboto Regular, Helvetica Neue, sans-serif;
-    font-size: 40px;
-    color:#4285f4;
-    height: 60px;
-    line-height: 36px;
-    border-radius: 10px;
-    border: 1px solid #DADCE0;
-  }
-  
-
-  #ar-button:active {
-    background-color: #E8EAED;
-  }
-
-  #ar-button:focus {
-    outline: none;
-  }
-
-  #ar-button:focus-visible {
-    outline: 1px solid #4285f4;
-  }
-
-  @keyframes circle {
-    from { transform: translateX(-50%) rotate(0deg) translateX(50px) rotate(0deg); }
-    to   { transform: translateX(-50%) rotate(360deg) translateX(50px) rotate(-360deg); }
-  }
-
-  @keyframes elongate {
-    from { transform: translateX(100px); }
-    to   { transform: translateX(-100px); }
-  }
-
-  model-viewer > #ar-prompt {
-    position: absolute;
-    left: 50%;
-    bottom: 175px;
-    animation: elongate 2s infinite ease-in-out alternate;
-    display: none;
-  }
-
-  model-viewer[ar-status="session-started"] > #ar-prompt {
-    display: block;
-  }
-
-  model-viewer > #ar-prompt > img {
-    animation: circle 4s linear infinite;
-  }
-
-  model-viewer > #ar-failure {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: 175px;
-    display: none;
-  }
-
-  model-viewer[ar-tracking="not-tracking"] > #ar-failure {
-    display: block;
-  }
-
-  #ex1Slider .slider-selection {
-	background: #BABABA;
-}
-
-  .logo-image {
-    content:url(assets/logo.png);
-    width: 200px;
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    z-index: 1;
-  }
-
-  .slider-width
-  {
-    margin-top: 20px ;
-      width: 90%;
-  }
-
-  .slider {
-    width: 98%;
-    text-align: center;
-    overflow: hidden;
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
-  }
-
-  .slides {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .slide {
-    scroll-snap-align: start;
-    flex-shrink: 0;
-    width: 100px;
-    height: 100px;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-color: #ffffff;
-    margin-right: 10px;
-    border-radius: 10px;
-    border: none;
-    display: flex;
-  }
-
-  .capture_button {
-    width: 210px ;
-    margin-top: 10px ;
-  }
-
-  .slide.selected {
-    border: 2px solid #ff880a;
-  }
-
-  .slide:focus {
-    outline: none;
-  }
-
-  .slide:focus-visible {
-    outline: 1px solid #4285f4;
-  }
-
 </style>
 
 
