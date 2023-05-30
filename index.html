@@ -16,11 +16,11 @@
 <body>
 
 <div class="logo-image"></div>
-
+<!-- src="assets/models/Cube.glb"  -->
+<!-- poster="assets/models/Cube.png"  -->
 <model-viewer (
   id="blendViewer"
-  src="assets/models/Cube.glb" 
-  poster="assets/models/Cube.png" 
+ 
   shadow-intensity="0.0" 
   ar 
   ar-modes="webxr scene-viewer quick-look" 
@@ -48,8 +48,8 @@
   <div class="slider">
     <div class="slides">
     </button>
-      <button class="slide selected" onclick="switchSrc(this, 'Cube')" style="background-image: url('assets/models/Cube.png');">
-      <button class="slide" onclick="switchSrc(this, 'DamagedHelmet')" style="background-image: url('assets/models/DamagedHelmet.png');">
+      <button class="slide" onclick="switchSrc(this, 'bike')" style="background-image: url('assets/models/bike.png');">
+      <button class="slide selected" onclick="switchSrc(this, 'cube')" style="background-image: url('assets/models/Cube.png');">
     </button>
     </div>
     <div class="footer_button">
@@ -68,21 +68,30 @@
   const modelViewer = document.querySelector("model-viewer#blendViewer");
   const deg_label = document.querySelector('.value');
 
+  window.onload = function() {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+
+    if (urlParams.has('model')) {
+    modelViewer.setAttribute('src', "assets/models/" + urlParams.get('model').toString() + ".glb")
+  } 
+  else {
+    modelViewer.setAttribute('src', "assets/models/bike.glb")
+  }
+
+  };
+
   modelViewer.addEventListener("load", (ev) => {
+
   document.querySelector('#fov').addEventListener('input', (event) => {
     // console.log(event.target.value)
     let val = event.target.value.toString() + 'deg'
     modelViewer.setAttribute('field-of-view', val);
-    // console.log(deg_label)
-    // deg_label.setAttribute('Text', val)
 
-    // modelViewer.getBoundingBoxCenter()
+
+
   });
-
-  addLoadEvent(function() {  
-    // deg_label.innerHTML = 'your tip has been submitted!';
-
-    }); 
+ 
 
   // document.querySelector('#cam_target').addEventListener('input', (event) => {
   //   console.log(event.target.value)
