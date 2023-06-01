@@ -34,7 +34,7 @@
   max-field-of-view='175deg'
   data-js-focus-visible
   field-of-view='50deg'
-  shadow-intensity="1" 
+  shadow-intensity="0" 
   shadow-softness="0.1"
   )>
 
@@ -65,7 +65,7 @@
        
       <div class="slides">
         <label for="shadows">enable shadows :</label>
-        <input id="shadows" type="checkbox" checked="false">
+        <input id="shadows" type="checkbox" value="false">
       </div>
 
       <div class="rangecontainer">
@@ -150,7 +150,7 @@
     } else {
       modelViewer.shadowIntensity = "0"
     }
-    modelViewer.shadow_intensity = checkbox.checked ? '1' : '0';
+    // modelViewer.shadow_intensity = checkbox.checked ? '1' : '0';
 
   });
 
