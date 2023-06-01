@@ -60,12 +60,12 @@
     </button>
     </div>
     <div class="footer_button">
-      <button class="btn btn-light btn-block btn-lg capture_button" id="download-button">snapshot (s)</button>
+      <button class="btn btn-light btn-block btn-lg capture_button" id="download-button">Capture (c)</button>
       <!-- <button class="btn btn-light btn-block btn-lg capture_button" id="annotate-button">Markup</button> -->
        
       <div class="slides">
-        <label for="shadows">enable shadows :</label>
         <input id="shadows" type="checkbox" value="false">
+        <label for="shadows">Enable shadows (s)</label>
       </div>
 
       <div class="rangecontainer">
@@ -135,13 +135,32 @@
     ev.preventDefault();
   });
 
+  function activateCheckbox() {
+
+    if (! checkbox.checked) {
+        checkbox.checked = true;
+        modelViewer.shadowIntensity = "1"
+    }
+    else {
+      checkbox.checked = false;
+      modelViewer.shadowIntensity = "0"
+    }
+
+
+}
+
   document.querySelector("#download-button").addEventListener("click", downloadPosterToDataURL);
 
   document.addEventListener('keydown', (event) => {
     var code = event.code
-    if (code === 'KeyS') {
+    if (code === 'KeyC') {
       downloadPosterToDataURL();
     }
+
+    if (code === 'KeyS') {
+      activateCheckbox();
+    }
+
   }, false);
 
   checkbox.addEventListener('change',() => {
