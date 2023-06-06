@@ -1,197 +1,494 @@
- /* This keeps child nodes hidden while the element loads */
- :not(:defined) > * {
-    display: none;
-  }
-
-  model-viewer {
-    height: 100vh;
-    width: auto;
-    margin: 0;
-    padding: 0;
-    border: 0;
-    background-color: #eee;
-    overflow-x: hidden;
-    --poster-color: #eee;
-  }
-
-  #ar-button {
-    background-image: url(assets/ar.png);
-    background-repeat: no-repeat;
-    background-size: 40px 40px;
-    background-position: 12px 50%;
-    background-color: #fff;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    white-space: nowrap;
-    bottom: 132px;
-    padding: 0px 16px 0px 60px;
-    font-family: Roboto Regular, Helvetica Neue, sans-serif;
-    font-size: 40px;
-    color:#4285f4;
-    height: 60px;
-    line-height: 36px;
-    border-radius: 10px;
-    border: 1px solid #DADCE0;
-  }
-  
-
-  #ar-button:active {
-    background-color: #E8EAED;
-  }
-
-  #ar-button:focus {
-    outline: none;
-  }
-
-  #ar-button:focus-visible {
-    outline: 1px solid #4285f4;
-  }
-
-  @keyframes circle {
-    from { transform: translateX(-50%) rotate(0deg) translateX(50px) rotate(0deg); }
-    to   { transform: translateX(-50%) rotate(360deg) translateX(50px) rotate(-360deg); }
-  }
-
-  @keyframes elongate {
-    from { transform: translateX(100px); }
-    to   { transform: translateX(-100px); }
-  }
-
-  model-viewer > #ar-prompt {
-    position: absolute;
-    left: 50%;
-    bottom: 175px;
-    animation: elongate 2s infinite ease-in-out alternate;
-    display: none;
-  }
-
-  model-viewer[ar-status="session-started"] > #ar-prompt {
-    display: block;
-  }
-
-  model-viewer > #ar-prompt > img {
-    animation: circle 4s linear infinite;
-  }
-
-  model-viewer > #ar-failure {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: 175px;
-    display: none;
-  }
-
-  model-viewer[ar-tracking="not-tracking"] > #ar-failure {
-    display: block;
-  }
-
-  #ex1Slider .slider-selection {
-	background: #BABABA;
+babylon {
+  width: 100%;
+  height: 100%;
 }
 
-  .logo-image {
-    content:url(assets/logo.png);
-    width: 200px;
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    z-index: 1;
+viewer {
+  position: relative;
+  overflow: hidden;
+  /* Start stage */
+  z-index: 1;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  height: 100%;
+}
+
+@font-face {
+  font-family: 'babylon';
+  src: url('{{babylonFont}}') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+fill-container {
+  display: flex;
+}
+
+fill-container>* {
+  touch-action: none;
+}
+
+.icon {
+  font-family: "babylon";
+}
+
+.babylonjs-canvas {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  /* enable cross-browser pointer events */
+  touch-action: none;
+}
+
+nav-bar {
+  position: absolute;
+  height: 48px;
+  width: 100%;
+  bottom: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+nav-bar .nav-container {
+  display: flex;
+  flex-direction: row;
+  margin: 0 10px;
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+}
+
+nav-bar .animation-control {
+  background-color: rgba(91, 93, 107, .75);
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  width: 100%;
+  max-width: 1280px;
+  justify-content: center;
+}
+
+nav-bar .flex-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+
+nav-bar button {
+  background: none;
+  border: none;
+  color: white;
+  margin: 0;
+  padding: 0;
+
+  height: 100%;
+  min-width: 48px;
+  cursor: pointer;
+}
+
+nav-bar button:hover,
+nav-bar button:active,
+nav-bar button:focus {
+  background: none;
+  border: none;
+  outline: none;
+}
+
+nav-bar button:hover {
+  background-color: rgba(22, 24, 26, .20);
+}
+
+nav-bar .control-text {
+  font-family: "Segoe UI";
+  font-size: 12px;
+  font-weight: 400;
+  pointer-events: none;
+}
+
+nav-bar img,
+nav-bar .icon {
+  pointer-events: none;
+}
+
+.logo-button {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: center;
+  background-color: rgba(91, 93, 107, .75);
+  height: 48px;
+  min-width: 48px;
+  margin-right: 4px;
+}
+
+.logo-button img {
+  height: 20px;
+  width: 20px;
+}
+
+.types {
+  display: flex;
+  flex-direction: column;
+  width: 48px;
+}
+
+.types .flex-container,
+.speed .flex-container {
+  align-items: center;
+}
+
+.menu-options {
+  position: absolute;
+  bottom: 48px;
+  width: 48px;
+  background-color: rgba(22, 24, 26, .90);
+}
+
+.logo-button,
+.animation-label,
+.types-icon,
+.help,
+.speed {
+  display: none;
+}
+
+.types-icon:after {
+  font-size: 16px;
+  content: "\F6BE";
+}
+
+.up-icon:after {
+  line-height: 16px;
+  font-size: 12px;
+  content: "\E70E";
+}
+
+.play-icon:after {
+  font-size: 16px;
+  content: "\E768";
+}
+
+.pause-icon:after {
+  font-size: 16px;
+  content: "\E769";
+}
+
+.fullscreen-icon:after {
+  font-size: 16px;
+  content: "\E740";
+}
+
+/*
+      A few browsers dont support combining the next rule to one. Redudant.
+      */
+
+viewer.in-fullscreen .fullscreen-icon:after {
+  content: "\E73F";
+}
+
+.help-icon:after {
+  font-size: 16px;
+  content: "\EF4E";
+}
+
+viewer.in-vr .vr-icon:after {
+  font-size: 16px;
+  content: "\E7F4";
+}
+
+.vr-icon:after {
+  font-size: 16px;
+  content: "\F119";
+}
+
+.progress-control {
+  display: flex;
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  align-items: center;
+}
+
+.animation-number {
+  margin: 0 6px;
+}
+
+.speed-text {
+  margin-right: 6px;
+}
+
+.progress-circle {
+  width: 12px;
+  height: 12px;
+  border: 2px solid rgb(255, 255, 255);
+  border-radius: 50%;
+  background-color: rgb(91, 93, 107);
+  cursor: pointer;
+  position: relative;
+  bottom: 10px;
+  pointer-events: none;
+}
+
+.default-control {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  background-color: rgba(91, 93, 107, .75);
+}
+
+.menu-options button {
+  width: 100%;
+  height: 48px;
+  color: rgb(142, 147, 155);
+}
+
+.menu-options button {
+  width: 100%;
+  height: 48px;
+  color: rgb(142, 147, 155);
+}
+
+.menu-options button:hover {
+  background-color: transparent;
+  color: rgb(255, 255, 255);
+}
+
+.menu-options .animation-number {
+  margin: 0 18px 0 6px;
+}
+
+.menu-options .speed-text {
+  margin-right: 18px;
+}
+
+.menu-options {
+  visibility: hidden;
+}
+
+.open .menu-options {
+  visibility: visible;
+}
+
+.types .menu-options {
+  width: 144px;
+}
+
+.types .menu-options button {
+  padding: 0 8px;
+  justify-content: left;
+}
+
+.types .menu-options button>* {
+  display: flex;
+  margin: 8px;
+}
+
+.types .menu-options button span.animation-number {
+  display: none;
+}
+
+/* Disable fullscreen button for small screens */
+
+.fullscreen {
+  display: none;
+}
+
+@media screen and (min-width: 540px) {
+  .help,
+  .types-icon,
+  .speed {
+    display: inline-block;
   }
 
-  .slider-width
-  {
-    margin-top: 20px ;
-      width: 90%;
+  .logo-button {
+    display: flex;
   }
 
-  .slider {
-    width: 98%;
-    text-align: center;
+  .types {
+    width: 84px;
+  }
+
+  .progress-bar-container {
+    margin: 0 12px;
+  }
+
+  .speed {
+    width: 64px;
+  }
+
+  .speed .menu-options {
+    width: 64px;
+  }
+
+  .fullscreen {
+    display: block;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .animation-label {
+    display: block;
+    margin-left: 6px;
+    text-overflow: ellipsis;
     overflow: hidden;
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
   }
 
-  .slides {
+  nav-bar button.animation-buttons {
+    padding: 0 8px;
+    justify-content: left;
+  }
+
+  .icon.up-icon {
+    margin-left: 8px;
+  }
+
+  nav-bar button.animation-buttons>div {
     display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
+    pointer-events: none;
   }
 
-  .slide {
-    scroll-snap-align: start;
-    flex-shrink: 0;
-    width: 100px;
-    height: 100px;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-color: #ffffff;
-    margin-right: 10px;
-    border-radius: 10px;
-    border: none;
-    display: flex;
+  .animation-number {
+    display: none;
   }
 
-  .capture_button {
-    width: 210px ;
-    margin-top: 10px ;
+  .progress-bar-container {
+    margin: 0 12px;
   }
 
-  .slide.selected {
-    border: 2px solid #ff880a;
+  .types {
+    width: 144px;
   }
+}
 
-  .slide:focus {
-    outline: none;
-  }
 
-  .slide:focus-visible {
-    outline: 1px solid #4285f4;
-  }
+.progress-wrapper {
+  -webkit-appearance: none;
+  cursor: pointer;
+  width: 100%;
+  outline: none;
+  margin: 0 12px;
+  height: 30px;
+  background-color: transparent;
+}
 
-  .rangecontainer {
-    width: 100%;
-  }
-  
-  .range {
-    -webkit-appearance: none;
-    width: 100%;
-    height: 20px;
-    background: #d3d3d3;
-    outline: none;
-    opacity: 0.7;
-    -webkit-transition: .2s;
-    transition: opacity .2s;
-    margin-top: 10px ;
-  }
-  
-  .range:hover {
-    opacity: 1;
-  }
-  
-  .range::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 25px;
-    height: 20px;
-    background: #464646;
-    cursor: pointer;
-  }
-  
-  .range::-moz-range-thumb {
-    width: 25px;
-    height: 20px;
-    background: #04AA6D;
-    cursor: pointer;
-  }
+/*Chrome -webkit */
 
-  #shadows
-  {
-    margin-top: 10px ;
-    margin-right: 10px ;
+.progress-wrapper::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid white;
+  border-radius: 50%;
+  background: rgba(91, 93, 107, 1);
+  margin-top: -10px;
+}
+
+.progress-wrapper::-webkit-slider-runnable-track {
+  height: 2px;
+  -webkit-appearance: none;
+  background-color: white;
+}
+
+
+/** FireFox -moz */
+
+.progress-wrapper::-moz-range-progress {
+  background-color: white;
+  height: 2px;
+}
+
+      /* Loading Screen element */
+
+loading-screen {
+  position: absolute;
+  left: 0;
+  z-index: 100;
+  opacity: 1;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  -webkit-transition: opacity 1s ease;
+  -moz-transition: opacity 1s ease;
+  transition: opacity 1s ease;
+}
+
+img.loading-image {
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
   }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.progress-wrapper::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border: 2px solid white;
+  border-radius: 50%;
+  background: rgba(91, 93, 107, 1);
+}
+
+.progress-wrapper::-moz-range-track {
+  background: white;
+  height: 2px;
+}
+
+/** IE -ms */
+
+.progress-wrapper::-ms-track {
+  height: 2px;
+
+  /*remove bg colour from the track, we'll use ms-fill-lower and ms-fill-upper instead */
+  background: transparent;
+
+  /*leave room for the larger thumb to overflow with a transparent border */
+  border-color: transparent;
+  border-width: 10px 0;
+
+  /*remove default tick marks*/
+  color: transparent;
+}
+
+.progress-wrapper::-ms-fill-lower {
+  background: white;
+  border-radius: 5px;
+}
+
+.progress-wrapper::-ms-fill-upper {
+  background: white;
+  border-radius: 5px;
+}
+
+.progress-wrapper::-ms-thumb {
+  width: 16px;
+  height: 16px;
+  border: 2px solid white;
+  border-radius: 50%;
+  background: rgba(91, 93, 107, 1);
+  margin-top: 0px;
+}
+
+span {
+  display: inline-block;
+}
