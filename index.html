@@ -22,12 +22,12 @@
 
 <div class="logo-image"></div>
 
+ <!-- camera-controls alt="A 3D model carousel" -->
+ <!-- rotation-per-second="30deg" -->
 <model-viewer (
-  id="blendViewer"
-
+  id="modelView"
   ar 
   ar-modes="webxr scene-viewer quick-look" 
-  camera-controls alt="A 3D model carousel"
   min-camera-orbit='auto auto 100%'
   max-camera-orbit='auto auto 100%'
   min-field-of-view='10deg'
@@ -36,6 +36,10 @@
   field-of-view='50deg'
   shadow-intensity="0" 
   shadow-softness="0.1"
+  camera-controls
+  rotation-per-second="30deg"
+  auto-rotate-delay="200"
+  
   )>
 
 
@@ -66,7 +70,10 @@
        
       <div class="slides">
         <input id="shadows" type="checkbox" value="false">
-        <label id="shadows">Enable shadows (s)</label>
+        <label id="shadows">Enable Shadows (s)</label>
+
+        <input id="autoRotate" type="checkbox" value="false">
+        <label id="autoRotate">Auto Rotate (r)</label>
       </div>
 
       <div class="rangecontainer">
@@ -81,9 +88,10 @@
 
 <script type="module">
 
-  const modelViewer = document.querySelector("model-viewer#blendViewer");
+  const modelViewer = document.querySelector("model-viewer#modelView");
   const deg_label = document.querySelector('.value');
-  const checkbox = document.querySelector('#shadows');
+  const cbx_shadows = document.querySelector('#shadows');
+  const cbx_autoRotate = document.querySelector('#autoRotate');
   
 
   window.onload = function() {
@@ -105,6 +113,7 @@
     // console.log(event.target.value)
     let val = event.target.value.toString() + 'deg'
     modelViewer.setAttribute('field-of-view', val);
+
 
   });
 
@@ -136,17 +145,29 @@
     ev.preventDefault();
   });
 
-  function activateCheckbox() {
+    function activateShadows() {
 
-    if (! checkbox.checked) {
-        checkbox.checked = true;
+    if (! cbx_shadows.checked) {
         modelViewer.shadowIntensity = "1"
+        cbx_shadows.checked = true
     }
     else {
-      checkbox.checked = false;
       modelViewer.shadowIntensity = "0"
+      cbx_shadows.checked = false
     }
 
+    }
+
+  function activateAutoRotate() {
+
+    if (! cbx_autoRotate.checked) {
+        modelViewer.autoRotate = true;
+        cbx_autoRotate.checked = true;
+    }
+    else {
+      modelViewer.autoRotate = false
+      cbx_autoRotate.checked = false;
+    }
 
 }
 
@@ -159,18 +180,37 @@
     }
 
     if (code === 'KeyS') {
-      activateCheckbox();
+      activateShadows();
+    }
+
+    if (code === 'KeyR') {
+      activateAutoRotate();
     }
 
   }, false);
 
-  checkbox.addEventListener('change',() => {
-    if (event.currentTarget.checked) {
-      modelViewer.shadowIntensity = "1"
-    } else {
-      modelViewer.shadowIntensity = "0"
-    }
+  cbx_shadows.addEventListener('change',() => {
+
+    // modelViewer.autoRotate = checkbox.checked ? '' : 'legacy';
+
+    modelViewer.shadowIntensity = event.currentTarget.checked
+
+
+    // if (event.currentTarget.checked) {
+    //   modelViewer.shadowIntensity = "1"
+    //   // modelViewer.autoRotate = true
+    // } else {
+    //   modelViewer.shadowIntensity = "0"
+    //   // modelViewer.autoRotate = false
+    // }
+
     // modelViewer.shadow_intensity = checkbox.checked ? '1' : '0';
+
+  });
+
+  autoRotate.addEventListener('change',() => {
+
+  modelViewer.autoRotate = event.currentTarget.checked
 
   });
 

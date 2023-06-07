@@ -139,7 +139,7 @@
   }
 
   .capture_button {
-    width: 210px ;
+    width: 320px ;
     margin-top: 10px ;
   }
 
@@ -192,6 +192,12 @@
   }
 
   #shadows
+  {
+    margin-top: 10px ;
+    margin-right: 10px ;
+  }
+
+  #autoRotate
   {
     margin-top: 10px ;
     margin-right: 10px ;
